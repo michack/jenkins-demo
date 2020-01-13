@@ -1,0 +1,67 @@
+jenkins:
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+  clouds:
+  - docker:
+      dockerApi:
+        connectTimeout: 60
+        dockerHost:
+          uri: "tcp://dockerhost:4243"
+        readTimeout: 60
+      name: "docker"
+      templates:
+      - connector:
+          ssh:
+            sshKeyStrategy:
+              injectSSHKey:
+                user: "jenkins"
+        dockerTemplateBase:
+          image: "michack/slave"
+          volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+          volumesString: "/var/run/docker.sock:/var/run/docker.sock"
+        labelString: "slave"
+        mode: EXCLUSIVE
+        pullStrategy: PULL_NEVER
+        pullTimeout: 300
+        remoteFs: "/home/jenkins"
+  numExecutors: 2
+  securityRealm:
+    local:
+      allowsSignup: false
+      enableCaptcha: false
+      users:
+      - id: "testuser"
+        password: ${adminpw:-admin}
+jobs:
+  - script: >
+      pipelineJob("seed") {
+        definition {
+            cpsScm {
+                scriptPath('jenkins-jobs/seed.groovy')
+                scm {
+                    git {
+                        remote { url 'https://github.com/michack/jenkins-demo.git' }
+                        branch '*/master'
+                        extensions {}
+                    }
+                }
+            }
+        }
+      }
+
+security:
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+  sSHD:
+    port: -1
+tool:
+  git:
+    installations:
+    - home: "git"
+      name: "Default"

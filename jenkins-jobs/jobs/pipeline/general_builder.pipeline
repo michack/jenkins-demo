@@ -1,0 +1,19 @@
+pipeline {
+    agent { label 'slave' }
+    stages {
+        stage('checkout') {
+            steps {
+                echo "fetching ${APP_REPO_URL} branch: ${APP_REPO_BRANCH}"
+                checkout([$class: 'GitSCM',
+                    branches: [[name: APP_REPO_BRANCH ]],
+                    userRemoteConfigs: [[url: APP_REPO_URL]]])
+            }
+        }
+        stage('build') {
+            steps {
+                echo 'building ' + APP_NAME
+                sh "docker build . --no-cache -t michack/$APP_NAME -f $APP_DOCKERFILE"
+            }
+        }
+    }
+}
