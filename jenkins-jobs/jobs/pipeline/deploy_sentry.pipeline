@@ -5,10 +5,11 @@ pipeline {
             steps {
                 echo 'deploying sentry'
                 sh '''
-	                docker run -d --name redis -d redis
-	                docker run -d --name postgres -e POSTGRES_PASSWORD="password" -e POSTGRES_USER="user" postgres:9.5
-	                SENTRY_SECRET_KEY=$(docker run -i --rm --name sentry --link redis:redis michack/sentry config generate-secret-key)
-	                docker run -d --rm -p 9000:9000 --name sentry --link redis:redis --link postgres:postgres -e SENTRY_SECRET_KEY=${SENTRY_SECRET_KEY} michack/sentry run web
+                    docker run -d --name redis -d redis
+                    docker run -d --name postgres -e POSTGRES_PASSWORD="secret" -e POSTGRES_USER="sentry" postgres:9.5
+                    SENTRY_SECRET_KEY=$(docker run -i --rm --name sentry --link redis:redis michack/sentry config generate-secret-key)
+                    docker run -i --rm --name sentry --link redis:redis --link postgres:postgres -e SENTRY_SECRET_KEY=${SENTRY_SECRET_KEY} michack/sentry upgrade --noinput
+                    docker run -d -p 9000:9000 --name sentry --link redis:redis --link postgres:postgres -e SENTRY_SECRET_KEY=${SENTRY_SECRET_KEY} michack/sentry run web
                 '''
             }
         }

@@ -7,6 +7,8 @@ pipeline {
                 checkout([$class: 'GitSCM',
                     branches: [[name: APP_REPO_BRANCH ]],
                     userRemoteConfigs: [[url: APP_REPO_URL]]])
+
+                sh "sed -i \"s/'autocommit': True,//\" docker/sentry.conf.py"
             }
         }
         stage('build') {
