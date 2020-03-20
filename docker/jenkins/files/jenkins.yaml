@@ -1,3 +1,13 @@
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - kubeconfig:
+          id: "kubernetes"
+          kubeconfigSource:
+            fileOnMaster:
+              kubeconfigFile: "/var/jenkins_home/.kube/config"
+          scope: GLOBAL
 jenkins:
   authorizationStrategy:
     loggedInUsersCanDoAnything:

@@ -26,3 +26,4 @@ pipeline-stage-tags-metadata
 pipeline-model-declarative-agent
 pipeline-rest-api
 docker
+kubernetes-cd
