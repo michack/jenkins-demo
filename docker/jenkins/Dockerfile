@@ -1,4 +1,5 @@
 FROM jenkins/jenkins:lts
+USER root
 
 # configuration
 COPY files/jenkins.yaml /usr/share/jenkins/ref/jenkins.yaml
@@ -18,3 +19,5 @@ RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key a
 RUN touch /etc/apt/sources.list.d/kubernetes.list
 RUN echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
 RUN apt-get update && apt-get install -y kubectl
+
+USER jenkins
