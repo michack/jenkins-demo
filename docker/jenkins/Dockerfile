@@ -20,4 +20,9 @@ RUN touch /etc/apt/sources.list.d/kubernetes.list
 RUN echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
 RUN apt-get update && apt-get install -y kubectl
 
+# awscli
+RUN apt-get -y install python-pip && pip install awscli
+
+RUN apt-get clean
+
 USER jenkins
