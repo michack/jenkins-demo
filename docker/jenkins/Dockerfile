@@ -27,5 +27,7 @@ RUN apt-get clean
 
 USER jenkins
 
-ADD https://github.com/michack/jenkins-demo/blob/k8s/docker/jenkins/entrypoint.sh /usr/local/bin/entrypoint.sh
-#ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ADD https://raw.githubusercontent.com/michack/jenkins-demo/k8s/docker/jenkins/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod 755 /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
