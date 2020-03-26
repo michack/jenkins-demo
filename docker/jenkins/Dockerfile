@@ -25,4 +25,7 @@ RUN apt-get -y install python-pip && pip install awscli
 
 RUN apt-get clean
 
+COPY entrypoint.sh /entrypoint.sh
 USER jenkins
+
+ENTRYPOINT ["/entrypoint.sh"]
