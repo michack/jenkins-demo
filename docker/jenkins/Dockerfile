@@ -30,4 +30,4 @@ RUN chmod 755 /usr/local/bin/entrypoint.sh
 
 USER jenkins
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+#ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
