@@ -25,9 +25,9 @@ RUN apt-get -y install python-pip && pip install awscli
 
 RUN apt-get clean
 
-USER jenkins
-
 ADD https://raw.githubusercontent.com/michack/jenkins-demo/k8s/docker/jenkins/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod 755 /usr/local/bin/entrypoint.sh
+
+USER jenkins
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
