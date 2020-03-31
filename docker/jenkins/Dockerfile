@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y kubectl
 RUN apt-get -y install python-pip && pip install awscli
 
 # yq
-RUN add-apt-repository -y ppa:rmescandon/yq && apt-get -y install yq
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6657DBE0CC86BB64 && add-apt-repository -y ppa:rmescandon/yq && apt-get -y install yq
 
 RUN apt-get clean
 
