@@ -23,6 +23,9 @@ RUN apt-get update && apt-get install -y kubectl
 # awscli
 RUN apt-get -y install python-pip && pip install awscli
 
+# yq
+RUN add-apt-repository -y ppa:rmescandon/yq && apt-get -y install yq
+
 RUN apt-get clean
 
 ADD https://raw.githubusercontent.com/michack/jenkins-demo/k8s/docker/jenkins/entrypoint.sh /usr/local/bin/entrypoint.sh
