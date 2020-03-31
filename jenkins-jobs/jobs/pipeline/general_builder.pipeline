@@ -1,25 +1,25 @@
 node {
-    env.imageName = env.ECR_REPO_URL + ":$APP_NAME-$BUILD_NUMBER"
-    echo env.imageName
+    env.IMAGE_NAME = env.ECR_REPO_URL + ":$APP_NAME-$BUILD_NUMBER"
+    echo env.IMAGE_NAME
     stage('checkout') {
         echo "fetching ${APP_REPO_URL} branch: ${APP_REPO_BRANCH}"
         checkout([$class: 'GitSCM',
             branches: [[name: APP_REPO_BRANCH]],
             userRemoteConfigs: [[url: APP_REPO_URL]]])
-        sh "yq w -i ${APP_MANIFESTS_DIR}/pod.yaml 'spec.template.spec.containers.[0].image' \"\$imageName\""
-        sh "cat ${APP_MANIFESTS_DIR}/pod.yaml"
+        sh "yq w -i ${APP_MANIFESTS_DIR}/*.yaml 'spec.template.spec.containers.[0].image' \"\$IMAGE_NAME\""
+        sh "cat ${APP_MANIFESTS_DIR}/*.yaml"
     }
     stage('build') {
         echo 'building ' + APP_NAME
         sh "docker build --network=host . -t ${APP_NAME} -f $APP_DOCKERFILE"
-        sh "docker tag ${APP_NAME} ${env.imageName}"
+        sh "docker tag ${APP_NAME} ${env.IMAGE_NAME}"
     }
     stage('push') {
         echo 'pushing ' + APP_NAME
-        sh "docker push ${env.imageName}"
+        sh "docker push ${env.IMAGE_NAME}"
     }
     stage('deploy') {
         echo 'deploying ' + APP_NAME
-        sh "kubectl apply -f ${APP_MANIFESTS_DIR}/*.yaml"
+        sh "kubectl apply -f ${APP_MANIFESTS_DIR}/"
     }
 }

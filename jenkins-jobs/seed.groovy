@@ -3,7 +3,6 @@ node{
     checkout([$class: 'GitSCM',
         branches: [[name: 'master' ]],
         userRemoteConfigs: [[url: 'https://github.com/michack/jenkins-demo.git']]])
-
   }
   stage("seed"){
     jobDsl targets: 'jenkins-jobs/jobs/*.groovy',
